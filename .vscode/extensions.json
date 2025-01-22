@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    // 支持 dotenv 文件语法
+    "mikestead.dotenv",
+    // 源代码的拼写检查器
+    "streetsidesoftware.code-spell-checker",
+    // 代码格式化
+    "charliermarsh.ruff",
+    // 代码风格和质量检查
+    "matangover.mypy"
+  ],
+  "unwantedRecommendations": [ ]
+}

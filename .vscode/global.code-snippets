@@ -1,0 +1,13 @@
+{
+  "main": {
+    "scope": "python",
+    "prefix": "main",
+    "body": [
+      "def main() -> None:",
+      "    $1",
+      "",
+      "if __name__ == '__main__':",
+      "    main()",
+    ],
+  },
+}

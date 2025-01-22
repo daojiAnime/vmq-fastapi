@@ -1,0 +1,40 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    // workbench
+    "workbench.list.smoothScrolling": true,
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.tree.indent": 10,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.closeOnFileDelete": true,
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.perEditorGroup": true,
+    "workbench.editor.limit.value": 5,
+
+    // editor
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "editor.cursorBlinking": "expand",
+    "editor.largeFileOptimizations": false,
+    "editor.accessibilitySupport": "off",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.guides.bracketPairs": "active",
+    "editor.inlineSuggest.enabled": true,
+    "editor.suggestSelection": "recentlyUsedByPrefix",
+    "editor.acceptSuggestionOnEnter": "smart",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.stickyScroll.enabled": true,
+    "editor.hover.sticky": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.autoClosingBrackets": "beforeWhitespace",
+    "editor.autoClosingDelete": "always",
+    "editor.autoClosingOvertype": "always",
+    "editor.autoClosingQuotes": "beforeWhitespace",
+    "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "explicit",
+        "source.organizeImports": "never"
+    },
+}
