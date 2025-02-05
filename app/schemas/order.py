@@ -32,7 +32,13 @@ class OrderBase(SQLModel):
 
 
 class OrderCreate(OrderBase):
-    pass
+    type: OrderType | None = Field(default=None, description="订单类型")
+    pay_id: str | None = Field(default=None, description="商户订单ID")
+    price: Decimal | None = Field(default=None, description="订单金额")
+    real_price: Decimal | None = Field(default=None, description="实际支付金额")
+    notify_url: str | None = Field(default=None, description="异步回调地址")
+    return_url: str | None = Field(default=None, description="同步回调地址")
+    callback_args: dict[str, Any] | None = Field(default=None, description="回调参数")
 
 
 class OrderList(SQLModel):

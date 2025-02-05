@@ -1,10 +1,10 @@
 from datetime import timedelta
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from app import crud
-from app.api.deps import CurrentUser, SessionDep
+from app.api.deps import CurrentUser, SessionDep, get_current_user
 from app.core import security
 from app.core.config import settings
 from app.models.user import UserCreate, UserPublic, UserRegister
@@ -27,13 +27,13 @@ def login(session: SessionDep, payload: LoginPayload) -> Any:
     )
 
 
-@router.post("/logout", dependencies=[CurrentUser])
+@router.post("/logout", dependencies=[Depends(get_current_user)])
 def logout() -> Any:
     """jwt token doesn't need to be invalidated"""
     pass
 
 
-@router.get("/codes", response_model=list[str], dependencies=[CurrentUser])
+@router.get("/codes", response_model=list[str], dependencies=[Depends(get_current_user)])
 def get_codes() -> Any:
     """access codes is not necessary."""
     return []

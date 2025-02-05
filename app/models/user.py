@@ -6,6 +6,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from app.models.order import Order
+    from app.models.user_setting import UserSetting
 
 
 # Shared properties
@@ -43,6 +44,7 @@ class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     orders: list["Order"] = Relationship(back_populates="owner", cascade_delete=True)
+    setting: "UserSetting" = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required

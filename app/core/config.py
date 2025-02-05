@@ -74,7 +74,7 @@ class Settings(BaseSettings):
 
     REDIS_HOST: str
     REDIS_PORT: int
-    REDIS_PASSWORD: str
+    REDIS_PASSWORD: str = ""
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -118,7 +118,7 @@ class Settings(BaseSettings):
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
             message = (
-                f'The value of {var_name} is "changethis", ' "for security, please change it, at least for deployments."
+                f'The value of {var_name} is "changethis", for security, please change it, at least for deployments.'
             )
             if self.ENVIRONMENT == "local":
                 warnings.warn(message, stacklevel=1)
@@ -134,7 +134,7 @@ class Settings(BaseSettings):
         return self
 
     # 订单创建间隔时间
-    ORDER_INTERVAL: int = 60
+    # ORDER_INTERVAL: int = 60
     # 心跳超时时间
     HEARTBEAT_TIMEOUT: int = 10
     # 通知重试次数, 默认3次，每次间隔4-15秒指数级增长

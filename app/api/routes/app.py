@@ -68,7 +68,7 @@ def app_push(
         select(Order)
         .where(Order.real_price == price)
         .where(Order.type == pay_type)
-        .where(Order.created_at > datetime.fromtimestamp(t) - timedelta(seconds=settings.ORDER_INTERVAL))
+        .where(Order.created_at > datetime.fromtimestamp(t) - timedelta(seconds=user_setting.order_interval))
     )
     order = session.exec(order_stmt).first()
     if not order:

@@ -33,7 +33,7 @@ class RedisClientHeartbeatManager:
                 offline_clients.append(client_id)
         return offline_clients
 
-    def remove_offlien_clients(self) -> None:
+    def remove_offline_clients(self) -> None:
         for client_id in self.redis.scan_iter():
             last_heartbeat = self.redis.hget(client_id, "last_heartbeat")
             if last_heartbeat and datetime.fromisoformat(last_heartbeat) < datetime.now() - timedelta(
