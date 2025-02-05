@@ -3,11 +3,12 @@ from typing import Any
 from sqlmodel import Session, or_, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate
+from app.models import User, UserCreate, UserSetting, UserUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     db_obj = User.model_validate(user_create, update={"hashed_password": get_password_hash(user_create.password)})
+    db_obj.setting = UserSetting(secret_key=UserSetting.gen_secret_key())
     session.add(db_obj)
     session.commit()
     session.refresh(db_obj)

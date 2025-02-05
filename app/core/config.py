@@ -133,8 +133,6 @@ class Settings(BaseSettings):
 
         return self
 
-    # 订单创建间隔时间
-    # ORDER_INTERVAL: int = 60
     # 心跳超时时间
     HEARTBEAT_TIMEOUT: int = 10
     # 通知重试次数, 默认3次，每次间隔4-15秒指数级增长

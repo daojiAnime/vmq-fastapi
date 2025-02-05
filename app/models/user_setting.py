@@ -20,9 +20,6 @@ class UserSetting(SQLModel, table=True):
     notify_url: str | None = Field(default=None, description="异步回调地址")
     return_url: str | None = Field(default=None, description="同步回调地址")
     app_id: str | None = Field(default=None, description="应用ID", max_length=64)
-    amount_increment: int = Field(default=1, description="金额递增", ge=-1, le=1)
-
-    # 订单创建间隔时间
     order_interval: int = Field(default=60, description="订单创建间隔时间")
     is_order_price_increase: bool = Field(default=False, description="是否开启订单真实金额递增/递减")
     order_real_price_step: Decimal = Field(default=Decimal("0.01"), description="订单真实金额递增/递减的步长")
