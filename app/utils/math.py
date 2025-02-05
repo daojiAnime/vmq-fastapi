@@ -17,10 +17,3 @@ def find_next_price(prices: list[Decimal], start_price: Decimal, step: Decimal) 
         if vir_price not in prices:
             return vir_price
     return vir_prices[-1] + step
-
-
-amount_list = [Decimal("0.1"), Decimal("0.3"), Decimal("0.5"), Decimal("0.7")]
-step = Decimal("0.1")
-print(f"test list: {amount_list}")
-print(f"test step: {step}")
-print(f"test result: {find_next_price(amount_list, Decimal('0'), step)}")

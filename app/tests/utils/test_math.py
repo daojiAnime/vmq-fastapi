@@ -12,7 +12,7 @@ def test_find_next_price():
     # assert find_next_price([Decimal("0.1"), Decimal("0.3")], Decimal("0.1")) == Decimal("0.2")  # 中间缺口
     # assert find_next_price([Decimal("0.1"), Decimal("0.2")], Decimal("0.1")) == Decimal("0.3")  # 完整序列
     amount_list = [Decimal("0.1"), Decimal("0.2"), Decimal("0.4"), Decimal("0.5")]
-    step = Decimal("0.01")
+    step = Decimal("0.1")
     start_price = amount_list[0]
     print(f"test list: {amount_list}")
     print(f"test step: {step}")
