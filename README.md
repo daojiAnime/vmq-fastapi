@@ -56,6 +56,12 @@ pre-commit install
 
 如果是Mac用户，可能遇到权限问题，`PermissionError: [Errno 13] Permission denied: xxx`，可以使用`sudo pre-commit install`进行安装。
 
+### 初始化数据库
+
+```bash
+uv run app/initial_data.py
+```
+
 ### 开发启动
 
 `FastAPI CLI`使用`Uvicorn`作为ASGI服务器，在项目根目录执行`fastapi dev app/main.py`启动项目。生产环境则使用`fastapi run --workers 4 app/main.py`启动项目。

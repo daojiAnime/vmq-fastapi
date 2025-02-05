@@ -14,7 +14,7 @@ class UserSetting(SQLModel, table=True):
     uid: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
     owner: User | None = Relationship(back_populates="setting")
 
-    secret_key: str = Field(default_factory=lambda: UserSetting.gen_secret_key(), description="密钥", max_length=32)
+    secret_key: str = Field(default_factory=lambda: UserSetting.gen_secret_key(), description="密钥", max_length=64)
     wechat_qrcode: str | None = Field(default=None, description="微信二维码")
     alipay_qrcode: str | None = Field(default=None, description="支付宝二维码")
     notify_url: str | None = Field(default=None, description="异步回调地址")
