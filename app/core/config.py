@@ -139,4 +139,4 @@ class Settings(BaseSettings):
     NOTIFY_RETRY_COUNT: int = 3
 
 
-settings = Settings()  # type: ignore
+settings: Settings = Settings()  # type: ignore
