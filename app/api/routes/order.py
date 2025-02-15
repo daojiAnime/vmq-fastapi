@@ -1,12 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import func
 from sqlmodel import and_, col, delete, select, update
 
 from app.api.deps import CurrentUser, SessionDep
-from app.enums import OrderStatus
+from app.enums import OrderStatus, OrderType
 from app.models.order import Order
 from app.schemas.order import MultiOrderPayload, OrderCreate, OrderList
 from app.utils.math import find_next_price
@@ -15,20 +16,52 @@ router = APIRouter()
 
 
 @router.get("", response_model=OrderList)
-def read_orders(session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100) -> Any:
+def read_orders(
+    session: SessionDep,
+    current_user: CurrentUser,
+    pay_id: str | None = Query(default=None, description="商户订单ID"),
+    order_type: OrderType | None = Query(default=None, description="订单类型"),
+    state: OrderStatus | None = Query(default=None, description="订单状态"),
+    price: Decimal | None = Query(default=None, description="订单金额"),
+    real_price: Decimal | None = Query(default=None, description="实际支付金额"),
+    start: date | None = Query(default=None, description="开始时间"),
+    end: date | None = Query(default=None, description="结束时间"),
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
     """
     Retrieve orders.
     """
-    if current_user.is_superuser:
-        count_statement = select(func.count()).select_from(Order)
-        count = session.exec(count_statement).one()
-        statement = select(Order).offset(skip).limit(limit)
-        items = session.exec(statement).all()
-    else:
-        count_statement = select(func.count()).select_from(Order).where(Order.uid == current_user.id)
-        count = session.exec(count_statement).one()
-        statement = select(Order).where(Order.uid == current_user.id).offset(skip).limit(limit)
-        items = session.exec(statement).all()
+    # 用户权限条件
+    # 修改后的过滤条件构建方式, 使用列表来构建查询条件
+    conditions = [Order.uid == current_user.id]
+
+    # 动态添加有效过滤条件
+    if pay_id is not None:
+        conditions.append(Order.pay_id == pay_id)
+    if order_type is not None:
+        conditions.append(Order.type == order_type)
+    if state is not None:
+        conditions.append(Order.state == state)
+    if price is not None:
+        conditions.append(Order.price == price)
+    if real_price is not None:
+        conditions.append(Order.real_price == real_price)
+    if start is not None:
+        conditions.append(Order.created_at >= start)
+    if end is not None:
+        conditions.append(Order.created_at <= end)
+
+    # 构建基础查询
+    base_query = select(Order).where(and_(*conditions))
+
+    # 分页处理
+    paginated_query = base_query.offset(skip).limit(limit)
+    count_query = select(func.count()).select_from(base_query)
+
+    # 执行查询
+    count = session.exec(count_query).one()
+    items = session.exec(paginated_query).all()
 
     return OrderList(items=items, total=count)
 
