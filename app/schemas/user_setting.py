@@ -17,7 +17,7 @@ TransDatetime = Annotated[datetime, PlainSerializer(trans_datetime, when_used="j
 class UserSettingBase(SQLModel):
     id: int | None = Field(default=None, description="用户设置ID")
     uid: uuid.UUID | None = Field(default=None, description="用户ID")
-    secret_key: str | None = Field(default=None, description="密钥", max_length=32)
+    secret_key: str | None = Field(default=None, description="密钥", max_length=64)
     wechat_qrcode: str | None = Field(default=None, description="微信二维码")
     alipay_qrcode: str | None = Field(default=None, description="支付宝二维码")
     notify_url: str | None = Field(default=None, description="异步回调地址")

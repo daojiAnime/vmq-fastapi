@@ -19,7 +19,7 @@ def get_user_setting(current_user: CurrentUser) -> Any:
 def update_user_setting(session: SessionDep, user_setting_in: UserSettingBase, current_user: CurrentUser) -> Any:
     if not current_user.setting:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User setting not found")
-    current_user.setting.sqlmodel_update(user_setting_in)
+    current_user.setting.sqlmodel_update(user_setting_in, update={"uid": current_user.id})
     session.add(current_user.setting)
     session.commit()
     session.refresh(current_user.setting)
