@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from redis import Redis
 
+from app.core import logger
 from app.core.config import settings
 from app.enums import RedisDBEnum
 
@@ -23,8 +24,16 @@ class RedisClientHeartbeatManager:
         return value == b"1"
 
     def get_last_heartbeat(self, client_id: str) -> str:
+        logger.info("获取心跳时间", client_id=client_id, type=type(client_id))
         last_heartbeat = self.redis.hget(client_id, "last_heartbeat")
-        return last_heartbeat if last_heartbeat else None
+        return last_heartbeat or ""
+
+    def set_last_payment(self, client_id: str, payment: str) -> None:
+        self.redis.hset(client_id, "last_payment", payment)
+
+    def get_last_payment(self, client_id: str) -> str:
+        last_payment = self.redis.hget(client_id, "last_payment")
+        return last_payment or ""
 
     def check_offline_clients(self) -> list[str]:
         offline_clients = []

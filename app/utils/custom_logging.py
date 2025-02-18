@@ -73,6 +73,7 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
     root_logger.setLevel(log_level.upper())
 
     # logger_name_list = [name for name in logging.root.manager.loggerDict]
+    # rich.print(f"logger_name_list: {logger_name_list}")
     # for name, logger in logging.root.manager.loggerDict.items():
     #     if isinstance(logger, logging.PlaceHolder):
     #         continue

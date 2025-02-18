@@ -7,7 +7,7 @@ from starlette.datastructures import MutableHeaders
 from starlette.middleware.cors import CORSMiddleware
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from app.core.config import logger, settings
+from app.core import logger, settings
 from app.core.db import engine
 
 

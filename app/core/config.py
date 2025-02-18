@@ -1,10 +1,8 @@
-import logging
 import secrets
 import warnings
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
-import structlog
 from pydantic import (
     AnyUrl,
     BeforeValidator,
@@ -18,8 +16,6 @@ from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self
 
-logging.basicConfig(level=logging.INFO)
-logger = structlog.stdlib.get_logger()
 APP_DIR = Path(__file__).parent.parent
 
 

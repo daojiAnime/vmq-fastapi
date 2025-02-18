@@ -8,8 +8,8 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Query, status
 from sqlmodel import select
 
 from app.api.deps import SessionDep
+from app.core import logger, settings
 from app.core.client import REDIS_MANAGER
-from app.core.config import logger, settings
 from app.enums import OrderStatus, OrderType
 from app.models.order import Order
 from app.models.user_setting import UserSetting
@@ -84,6 +84,7 @@ def app_push(
     if notify_url:
         # 通知
         background_task.add_task(notify_order, order, OrderStatus.SUCCESS)
+    background_task.add_task(REDIS_MANAGER.set_last_payment, app_id, order.created_at.isoformat())
     return order
 
 
