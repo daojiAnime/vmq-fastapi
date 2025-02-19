@@ -22,6 +22,16 @@ pass
 
 前端项目是基于 [vben admin v5版本](https://github.com/vbenjs/vue-vben-admin) 进行二次开发的。 `vben admin`是一个集成度高、功能丰富、易于上手的 Vue3 中后台管理框架，[daojiAnime](https://daojianime.github.io/) 使用该框架开发过个人项目非常好用，在这里推荐给大家。
 
+#### 预览
+
+![image-20250219100105297](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100105297.png)
+
+![image-20250219100201541](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100201541.png)
+
+![image-20250219100216235](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100216235.png)
+
+
+
 ## 监控端
 
 ### Andorid端监控
