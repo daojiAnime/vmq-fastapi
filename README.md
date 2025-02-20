@@ -24,11 +24,12 @@ pass
 
 #### 预览
 
-![image-20250219100105297](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100105297.png)
-
-![image-20250219100201541](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100201541.png)
-
-![image-20250219100216235](https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100216235.png)
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+    <img src="https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100105297.png" alt="image-20250219100105297" style="width: 100%;" />
+    <img src="https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250219100201541.png" alt="image-20250219100201541" style="width: 100%;" />
+    <img src="https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250220153418108.png" alt="image-20250220153418108" style="width: 100%;" />
+    <img src="https://cdn.jsdelivr.net/gh/daojiAnime/cdn@master/img/image-20250220153400741.png" alt="image-20250220153400741" style="width: 100%;" />
+</div>
 
 
 
