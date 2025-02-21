@@ -22,9 +22,8 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
-    environment:
-      - TZ=Asia/Shanghai
-      - REDIS_PASSWORD=elv_tTZz8ihHvOLZznUtJiyNVAcKZhlUbSF847NcREg
+    env_file:
+      - .env
     command: >
       redis-server
       --bind 0.0.0.0
@@ -38,12 +37,14 @@ services:
     image: postgres:16.3
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     environment:
       - TZ=Asia/Shanghai
       - POSTGRES_SERVER=db
-      - POSTGRES_USER=vmq
-      - POSTGRES_PASSWORD=vmq.fastapi
-      - POSTGRES_DB=vmq
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./data/postgres-data:/var/lib/postgresql/data
