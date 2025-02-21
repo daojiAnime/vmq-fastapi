@@ -1,0 +1,74 @@
+x-restart: &restart_policy
+  restart: unless-stopped
+  deploy:
+    restart_policy:
+      condition: on-failure
+      delay: 60s
+
+services:
+  app:
+    <<: *restart_policy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      # 环境变量配置
+      - .env
+    entrypoint: ["fastapi", "run", "--workers", "4", "app/main.py"]
+  redis:
+    <<: *restart_policy
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Shanghai
+      - REDIS_PASSWORD=elv_tTZz8ihHvOLZznUtJiyNVAcKZhlUbSF847NcREg
+    command: >
+      redis-server
+      --bind 0.0.0.0
+      --requirepass $${REDIS_PASSWORD}
+      --appendonly yes
+      --rename-command KEYS ""
+    volumes:
+      - ./data/redis-data:/data
+  postgres:
+    <<: *restart_policy
+    image: postgres:16.3
+    ports:
+      - "5432:5432"
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=vmq
+      - POSTGRES_PASSWORD=vmq.fastapi
+      - POSTGRES_DB=vmq
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data/postgres-data:/var/lib/postgresql/data
+  pgadmin:
+    <<: *restart_policy
+    image: elestio/pgadmin:latest
+    depends_on:
+      - postgres
+    ports:
+      - "5050:5050"
+    environment:
+      - TZ=Asia/Shanghai
+      - PGADMIN_LISTEN_PORT=5050
+      - PGADMIN_DEFAULT_EMAIL=vmq-fastapi@vmq.com
+      - PGADMIN_DEFAULT_PASSWORD=vmq.fastapi
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+
+# 配置文件
+# configs:
+#   redis-conf:
+#     content: |
+#       port 6379
+#       bind 0.0.0.0
+#       appendonly yes
+#       requirepass password
+
+#       rename-command KEYS ""
