@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from rich import print  # noqa
 
-from app.utils.math import find_next_price
+from app.utils.math_tools import find_next_price
 
 
 def test_find_next_price():

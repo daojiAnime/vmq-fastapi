@@ -10,7 +10,7 @@ from app.api.deps import CurrentUser, SessionDep
 from app.enums import OrderStatus, OrderType
 from app.models.order import Order
 from app.schemas.order import MultiOrderPayload, OrderCreate, OrderList
-from app.utils.math import find_next_price
+from app.utils.math_tools import find_next_price
 
 router = APIRouter()
 

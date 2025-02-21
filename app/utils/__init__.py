@@ -1,1 +1,1 @@
-from app.utils.email import *  # noqa: F403
+from app.utils.email_tools import *  # noqa: F403
