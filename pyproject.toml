@@ -24,6 +24,8 @@ dependencies = [
     "structlog>=25.1.0",
     "orjson>=3.10.14",
     "redis[hiredis]>=5.2.1",
+    "pyzbar>=0.1.9",
+    "pillow>=11.1.0",
 ]
 
 [tool.uv]
