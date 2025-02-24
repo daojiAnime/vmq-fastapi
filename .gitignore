@@ -9,3 +9,9 @@ htmlcov
 .env
 .pytest_cache
 .ruff_cache
+
+data/postgres-data
+data/redis-data
+data/pgadmin-data
+
+.env.local

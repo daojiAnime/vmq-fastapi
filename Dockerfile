@@ -20,11 +20,12 @@ ENV UV_LINK_MODE=copy
 
 # Install dependencies
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
-RUN apt-get install libzbar0 \
-    --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project
+
+RUN apt-get update && apt-get install -y libzbar0
 
 ENV PYTHONPATH=/app
 

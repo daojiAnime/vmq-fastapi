@@ -6,7 +6,7 @@ x-restart: &restart_policy
       delay: 60s
 
 services:
-  app:
+  vmq-backend:
     <<: *restart_policy
     build:
       context: .
@@ -17,6 +17,16 @@ services:
       # 环境变量配置
       - .env
     entrypoint: ["fastapi", "run", "--workers", "4", "app/main.py"]
+    depends_on:
+      - redis
+      - postgres
+  vmq-frontend:
+    <<: *restart_policy
+    image: daoji/vmq-fastapi-frontend:0.0.1
+    ports:
+      - "5173:8080"
+    depends_on:
+      - vmq-backend
   redis:
     <<: *restart_policy
     image: redis:latest
@@ -27,16 +37,19 @@ services:
     command: >
       redis-server
       --bind 0.0.0.0
-      --requirepass $${REDIS_PASSWORD}
+      --requirepass $REDIS_PASSWORD
       --appendonly yes
       --rename-command KEYS ""
     volumes:
       - ./data/redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli -h localhost -p 6379 -a $REDIS_PASSWORD ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   postgres:
     <<: *restart_policy
     image: postgres:16.3
-    ports:
-      - "5432:5432"
     env_file:
       - .env
     environment:
@@ -48,20 +61,25 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./data/postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   pgadmin:
     <<: *restart_policy
     image: elestio/pgadmin:latest
     depends_on:
       - postgres
     ports:
-      - "5050:5050"
+      - "5555:5050"
     environment:
       - TZ=Asia/Shanghai
       - PGADMIN_LISTEN_PORT=5050
       - PGADMIN_DEFAULT_EMAIL=vmq-fastapi@vmq.com
       - PGADMIN_DEFAULT_PASSWORD=vmq.fastapi
     volumes:
-      - ./data/pgadmin:/var/lib/pgadmin
+      - ./data/pgadmin-data:/var/lib/pgadmin
 
 # 配置文件
 # configs:
