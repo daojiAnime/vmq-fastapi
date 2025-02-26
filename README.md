@@ -12,6 +12,12 @@
 
 </div>
 
+## 预览地址
+
+> ⚠️无 IPv6 网络请用手机流量访问
+
+**ipv6地址：** [VMQ Fastapi 演示站](http://ss.daojinobb.eu.org:53001)
+
 ## 项目结构
 
 pass
