@@ -15,3 +15,4 @@ data/redis-data
 data/pgadmin-data
 
 .env.local
+.DS_Store

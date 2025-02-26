@@ -8,11 +8,7 @@ x-restart: &restart_policy
 services:
   vmq-backend:
     <<: *restart_policy
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
+    image: daoji/vmq-fastapi-backend:latest
     env_file:
       # 环境变量配置
       - .env
@@ -22,16 +18,14 @@ services:
       - postgres
   vmq-frontend:
     <<: *restart_policy
-    image: daoji/vmq-fastapi-frontend:0.0.1
+    image: daoji/vmq-fastapi-frontend:latest
     ports:
-      - "5173:8080"
+      - "53001:8080"
     depends_on:
       - vmq-backend
   redis:
     <<: *restart_policy
     image: redis:latest
-    ports:
-      - "6379:6379"
     env_file:
       - .env
     command: >
@@ -71,8 +65,10 @@ services:
     image: elestio/pgadmin:latest
     depends_on:
       - postgres
+    deploy:
+      replicas: 0
     ports:
-      - "5555:5050"
+      - "53002:5050"
     environment:
       - TZ=Asia/Shanghai
       - PGADMIN_LISTEN_PORT=5050
