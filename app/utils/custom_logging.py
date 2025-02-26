@@ -1,11 +1,12 @@
 import logging
 import sys
+from types import TracebackType
 
 import structlog
 from structlog.types import EventDict, Processor
 
 
-def drop_color_message_key(_, __, event_dict: EventDict) -> EventDict:
+def drop_color_message_key(logger: logging.Logger, method_name: str, event_dict: EventDict) -> EventDict:  # noqa: ARG001
     """
     Uvicorn logs the message a second time in the extra `color_message`, but we don't
     need it. This processor drops the key from the event dict if it exists.
@@ -14,7 +15,7 @@ def drop_color_message_key(_, __, event_dict: EventDict) -> EventDict:
     return event_dict
 
 
-def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
+def setup_logging(json_logs: bool = False, log_level: str = "INFO") -> None:
     timestamper = structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S%Z.%f", utc=False)
 
     shared_processors: list[Processor] = [
@@ -98,7 +99,9 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
     uvicorn_access.setLevel(logging.INFO)
     uvicorn_access.propagate = False
 
-    def handle_exception(exc_type, exc_value, exc_traceback) -> None:
+    def handle_exception(
+        exc_type: type[BaseException], exc_value: BaseException, exc_traceback: TracebackType | None
+    ) -> None:
         if issubclass(exc_type, KeyboardInterrupt):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
             return

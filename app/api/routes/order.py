@@ -4,6 +4,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import func
+from sqlalchemy.sql._typing import _ColumnExpressionArgument
 from sqlmodel import and_, col, delete, select, update
 
 from app.api.deps import CurrentUser, SessionDep
@@ -57,7 +58,7 @@ def read_orders(
 
     # 分页处理
     paginated_query = base_query.offset(skip).limit(limit)
-    count_query = select(func.count()).select_from(base_query)
+    count_query = select(func.count()).select_from(base_query.alias())
 
     # 执行查询
     count = session.exec(count_query).one()
@@ -81,12 +82,12 @@ def create_order(session: SessionDep, order_in: OrderCreate, current_user: Curre
     us = current_user.setting
     if us.is_order_price_increase:
         # 筛选出状态为 PENDING 的订单
-        order = session.exec(statement.where(Order.state == OrderStatus.PENDING)).all()
+        orders = session.exec(statement.where(Order.state == OrderStatus.PENDING)).all()
         # 筛选出 ORDER_INTERVAL 间隔时间之内创建的订单
-        order = [item for item in order if item.created_at > datetime.now() - timedelta(seconds=us.order_interval)]
-        order = sorted(order, key=lambda x: x.real_price)
+        orders = [item for item in orders if item.created_at > datetime.now() - timedelta(seconds=us.order_interval)]
+        orders = sorted(orders, key=lambda x: x.real_price)
         # 找出连续的 real_price + order_real_price_step 不存在于订单中的 real_price 的金额
-        real_price = find_next_price(order, order_in.price, us.order_real_price_step)
+        real_price = find_next_price([o.real_price for o in orders], order_in.price, us.order_real_price_step)
     else:
         order = session.exec(statement).one()
         if order and order.created_at > datetime.now() - timedelta(seconds=us.order_interval):
@@ -105,11 +106,11 @@ def update_order(session: SessionDep, payload: MultiOrderPayload, current_user: 
     """
     Update orders by ids.
     """
-    where_clause = [col(Order.id).in_(payload.ids)]
+    where_clause: list[_ColumnExpressionArgument[bool]] = [col(Order.id).in_(payload.ids)]
     if not current_user.is_superuser:
         where_clause.append(col(Order.uid) == current_user.id)
     statement = update(Order).where(*where_clause).values(payload.model_dump(exclude_unset=True))
-    session.exec(statement)
+    session.exec(statement)  # type: ignore
     session.commit()
 
 
@@ -118,9 +119,9 @@ def delete_order(session: SessionDep, payload: MultiOrderPayload, current_user: 
     """
     Delete orders by ids.
     """
-    where_clause = [col(Order.id).in_(payload.ids)]
+    where_clause: list[_ColumnExpressionArgument[bool]] = [col(Order.id).in_(payload.ids)]
     if not current_user.is_superuser:
         where_clause.append(col(Order.uid) == current_user.id)
     statement = delete(Order).where(*where_clause)
-    session.exec(statement)
+    session.exec(statement)  # type: ignore
     session.commit()

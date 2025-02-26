@@ -34,7 +34,7 @@ def app_heart(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid App ID")
 
     # 10秒内有效
-    if md5(f"{t}{user_setting.secret_key}").hexdigest() != sign:
+    if md5(f"{t}{user_setting.secret_key}".encode()).hexdigest() != sign:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Sign")
 
     REDIS_MANAGER.set_client_online(app_id, True)
@@ -60,7 +60,7 @@ def app_push(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid App ID")
 
     origin_text = f"{pay_type}{price}{t}{user_setting.secret_key}"
-    if md5(origin_text).hexdigest() != sign:
+    if md5(origin_text.encode()).hexdigest() != sign:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Sign")
 
     # pay
@@ -91,11 +91,11 @@ def app_push(
 @tenacity.retry(
     stop=tenacity.stop_after_attempt(settings.NOTIFY_RETRY_COUNT),
     wait=tenacity.wait_exponential(multiplier=1, min=4, max=15),
-    before=tenacity.before_log(logger, logger.info),
-    after=tenacity.after_log(logger, logger.info),
+    before=tenacity.before_log(logger, logger.info),  # type: ignore
+    after=tenacity.after_log(logger, logger.info),  # type: ignore
     retry_error_callback=lambda retry_state: logger.error(f"Notify Order Failed: {retry_state.outcome}"),
 )
-def notify_order(order: Order, state: OrderStatus):
+def notify_order(order: Order, state: OrderStatus) -> None:
     """通知回调方"""
     data = {
         "order_id": order.id,
@@ -109,6 +109,8 @@ def notify_order(order: Order, state: OrderStatus):
     }
     if order.callback_args:
         data.update(order.callback_args)
+    if order.notify_url is None:
+        raise Exception(f"Notify Order Failed: {order.id} | Notify URL is None")
     response = httpx.post(order.notify_url, json=data, timeout=30)
     if response.status_code != 200:
         # todo: 记录通知失败日志

@@ -22,8 +22,8 @@ def login(session: SessionDep, payload: LoginPayload) -> Any:
         raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return LoginResponse(
-        access_token=security.create_access_token(user.id, expires_delta=access_token_expires),
-        token_type="Bearer",
+        accessToken=security.create_access_token(user.id, expires_delta=access_token_expires),
+        tokenType="Bearer",
     )
 
 

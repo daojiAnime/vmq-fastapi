@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from sqlmodel import Session, select
 
-from app import crud, models, schemas
+from app import crud, enums, models, schemas
 from app.core.db import engine
 
 
@@ -21,11 +21,13 @@ def create_user_data() -> None:
 def create_order_data() -> None:
     with Session(engine) as session:
         uid = session.exec(select(models.User.id)).first()
+        if uid is None:
+            raise ValueError("User not found")
         for i in range(100):
             crud.create_order(
                 session=session,
                 obj_in=schemas.OrderCreate(
-                    type=schemas.OrderType.ALIPAY,
+                    type=enums.OrderType.ALIPAY,
                     pay_id=f"demo_{i}",
                     price=100,
                     real_price=100,

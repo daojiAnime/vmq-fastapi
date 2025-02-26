@@ -83,7 +83,7 @@ def test_update_item(client: TestClient, superuser_token_headers: dict[str, str]
     assert content["title"] == data["title"]
     assert content["description"] == data["description"]
     assert content["id"] == str(item.id)
-    assert content["owner_id"] == str(item.owner_id)
+    assert content["owner"] == str(item.owner)
 
 
 def test_update_item_not_found(client: TestClient, superuser_token_headers: dict[str, str]) -> None:

@@ -1,10 +1,11 @@
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+from typing import Any
 
 import tomllib
 
 
-def get_project_version():
+def get_project_version() -> str | Any:
     try:
         # 方法1：通过已安装的包元数据获取（需要先安装包）
         return version("vmq-fastapi")

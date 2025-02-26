@@ -5,7 +5,7 @@ from io import BytesIO
 from PIL import Image
 
 # 使用 pyzbar 库解析二维码
-from pyzbar.pyzbar import decode
+from pyzbar.pyzbar import Decoded, decode  # type: ignore
 
 
 def parse_qrcode(qrcode_path: BytesIO) -> str:
@@ -16,9 +16,9 @@ def parse_qrcode(qrcode_path: BytesIO) -> str:
     # 将 BytesIO 转换为 PIL 图像
     image = Image.open(qrcode_path)
     # 解析二维码
-    decoded_objects = decode(image)
+    decoded_objects: list[Decoded] = decode(image)
     # 返回解析结果
-    return decoded_objects[0].data.decode("utf-8")
+    return decoded_objects[0].data.decode("utf-8")  # type: ignore
 
 
 def main() -> None:
