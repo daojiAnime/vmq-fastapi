@@ -33,6 +33,6 @@ def test_create_order(db: Session) -> None:
 
 
 def test_get_order(db: Session) -> None:
-    order: Order = db.exec(select(Order)).first()
+    order = db.exec(select(Order)).first()
     assert order is not None, "订单不存在"
     inspect(order)

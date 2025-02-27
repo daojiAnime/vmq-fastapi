@@ -5,7 +5,7 @@ from rich import print  # noqa
 from app.utils.math_tools import find_next_price
 
 
-def test_find_next_price():
+def test_find_next_price() -> None:
     # 测试用例
     # assert find_next_price([], Decimal("0.1")) == Decimal("0.1")  # 空列表
     # assert find_next_price([Decimal("0.1")], Decimal("0.1")) == Decimal("0.2")  # 单元素
